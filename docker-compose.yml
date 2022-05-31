@@ -1,75 +1,36 @@
-version: '3.1'
+version: "3.2"
+
 services:
-  mongodb:
+  mongo:
     image: mongo:latest
     restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: mongoadmin
-      MONGO_INITDB_DATABASE: demo
+    container_name: mongo
     ports:
-      - 27017:27017
+      - '27017:27017'
 
-  web:
-    build: ./config
+  django:
     restart: always
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./config:/config
+    container_name: django
+    command: bash -c "python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000"
+    build:
+      context: ./config/
+      dockerfile: Dockerfile
     ports:
-      - 8000:8000
-    links:
-      - mongodb
-#version: '3'
-#
-##volumes:
-##  init-db:
-##  data-db:
-#
-#services:
-##  mongodb:
-##    image: mongo
-##    restart: always
-##    container_name: mongodb
-##    environment:
-##      MONGO_INITDB_ROOT_USERNAME: root
-##      MONGO_INITDB_ROOT_PASSWORD: mongoadmin
-##      MONGO_INITDB_DATABASE: mongodb
-##    volumes:
-##      - ./data-db:/data/db
-##    ports:
-##      - '27017:27017'
-#
-#
-#  config:
-#    build: ./config
-#    restart: always
-#    command: python3 manage.py runserver
-#    volumes:
-#      - ./config:/config
-#    ports:
-#      - '8000:8000'
-##    links:
-##      - mongodb
-#    depends_on:
-#      - migration
-#
-#  migration:
-#    build: ./config
-#    command: python manage.py migrate
-#    volumes:
-#      - ./config:/config
-##    links:
-##      - mongodb
-#    depends_on:
-#      - make_migrations
-#
-#  make_migrations:
-#    build: ./config
-#    command: python manage.py makemigrations
-#    volumes:
-#      - ./config:/config
-##    links:
-##      - mongodb
-##    depends_on:
-##      - mongodb
+      - "8000:8000"
+    depends_on:
+      - mongo
+
+  react:
+    restart: always
+    command: npm start
+    container_name: react
+    build:
+      context: ./client/
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    depends_on:
+      - django
+

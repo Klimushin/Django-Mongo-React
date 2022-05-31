@@ -5,3 +5,4 @@ WORKDIR /config
 COPY requirements.txt /config/
 RUN pip install --upgrade pip && pip install -r requirements.txt
 ADD . /config/
+EXPOSE 8000
