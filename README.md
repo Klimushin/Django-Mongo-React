@@ -1,6 +1,6 @@
 # django_mongodb_react
 
-Dockerize Django-MongoDB-React Application with docker-compose
+Django-MongoDB-React Application with docker-compose
 
 ## Introduction
 
