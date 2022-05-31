@@ -21,9 +21,9 @@ Install using the following the command,
 
 ## Note
 
-To add test patients to the database use a GET request to the
+If you want to add test patients to the database, use a GET request to the
 URL http://locallhost:8000/api/v1/create-patient/secret-code with the params "quantity" = count (without params count of
 created patients will be 20)
 
-To delete all patients from database use a GET request to the
+If you want to delete all patients from database use a GET request to the
 URL http://locallhost:8000/api/v1/delete-patient/secret-code
