@@ -9,10 +9,12 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# import mongoengine
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -75,19 +77,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
+DATABASE = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'database',
-        # 'CLIENT': {
-        #     'host': 'mongodb://mongodb:27017',
-        #     'username': 'root',
-        #     'password': 'password',
-        #     'authSource': 'admin',
-        #     'authMechanism': 'SCRAM-SHA-1',
-        # }
+        'NAME': 'demo',
+        'CLIENT': {
+            'host': 'mongodb://mongodb:27017',
+            'username': 'root',
+            'password': 'mongoadmin',
+            'authSource': 'admin',
+            'authMechanism': 'SCRAM-SHA-1',
+        }
     }
 }
+
+DATABASE_URL = 'mongodb://mongodb:27017'
+# mongoengine.connect(host=MONGODB_HOST)
 
 AUTH_USER_MODEL = "main.User"
 

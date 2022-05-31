@@ -1,79 +1,75 @@
-#version: "3"
-#services:
-#  mongodb:
-#    environment:
-#      MONGO_INITDB_DATABASE: mydatabase
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: password
-#    hostname: mongodb
-#    image: mongo
-#    ports:
-#      - "27017:27017"
-#    volumes:
-#      - ./data-db:/data/db
-#
-#  django:
-#    build: ./config
-#    command: "python manage.py runserver 0.0.0.0:8000"
-#    volumes:
-#      - .:/django
-#    ports:
-#      - "8000:8000"
-#    links:
-#      - mongodb
-
-version: '3'
-
+version: '3.1'
 services:
   mongodb:
-    image: mongo
-    container_name: mongodb
+    image: mongo:latest
+    restart: always
     environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - ./data-db:/data/db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: mongoadmin
+      MONGO_INITDB_DATABASE: demo
     ports:
-      - '27017:27017'
-    restart: unless-stopped
+      - 27017:27017
 
-  config:
+  web:
     build: ./config
     restart: always
-    command: python manage.py runserver 127.0.0.1:8000
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./config:/config
     ports:
-      - '8000:8000'
+      - 8000:8000
     links:
       - mongodb
-#    depends_on:
-#      - db
+#version: '3'
 #
-#  db:
-#    image: mongo:4.1.8-xenial
-#    container_name: db
-#    restart: always
-#    volumes:
-#      - dbdata:/data/db
-#    networks:
-#      - app-network
-##  mongodb:
-##      image: mongo:latest
-##      restart: always
-##      environment:
-##        MONGO_INITDB_ROOT_USERNAME: root
-##        MONGO_INITDB_ROOT_PASSWORD: mongoadmin
-##        MONGO_INITDB_DATABASE: dbdemo
-##      volumes:
-##        - ./data-db:/data/db
-##      ports:
-##        - '27017:27017'
+##volumes:
+##  init-db:
+##  data-db:
 #
+#services:
 ##  mongodb:
-##    image: mongo:latest
+##    image: mongo
 ##    restart: always
+##    container_name: mongodb
+##    environment:
+##      MONGO_INITDB_ROOT_USERNAME: root
+##      MONGO_INITDB_ROOT_PASSWORD: mongoadmin
+##      MONGO_INITDB_DATABASE: mongodb
 ##    volumes:
-##        - ./data-db:/data/db
+##      - ./data-db:/data/db
 ##    ports:
 ##      - '27017:27017'
+#
+#
+#  config:
+#    build: ./config
+#    restart: always
+#    command: python3 manage.py runserver
+#    volumes:
+#      - ./config:/config
+#    ports:
+#      - '8000:8000'
+##    links:
+##      - mongodb
+#    depends_on:
+#      - migration
+#
+#  migration:
+#    build: ./config
+#    command: python manage.py migrate
+#    volumes:
+#      - ./config:/config
+##    links:
+##      - mongodb
+#    depends_on:
+#      - make_migrations
+#
+#  make_migrations:
+#    build: ./config
+#    command: python manage.py makemigrations
+#    volumes:
+#      - ./config:/config
+##    links:
+##      - mongodb
+##    depends_on:
+##      - mongodb
